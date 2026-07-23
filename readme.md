@@ -1,8 +1,10 @@
-![Next.js](https://img.shields.io/badge/Next.js-v14.2-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-v5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-v16.0-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-v7.1-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![LinkedIn API](https://img.shields.io/badge/LinkedIn_API-v2-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)
-![Vercel AI SDK](https://img.shields.io/badge/Vercel_AI_SDK-v3.0-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![eve](https://img.shields.io/badge/eve-v1.0-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Vercel AI SDK](https://img.shields.io/badge/Vercel_AI_SDK-v7.0-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![eve](https://img.shields.io/badge/eve-v0.26-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-v4.0-000000?style=for-the-badge&logo=Zod&logoColor=white)
+
 
 Most "AI agents" are just a ChatGPT wrapper duct-taped to a cron job.
 
