@@ -5,7 +5,6 @@
 ![eve](https://img.shields.io/badge/eve-v0.26-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Zod](https://img.shields.io/badge/Zod-v4.0-000000?style=for-the-badge&logo=Zod&logoColor=white)
 
-
 Most "AI agents" are just a ChatGPT wrapper duct-taped to a cron job.
 
 This project is a different animal.
