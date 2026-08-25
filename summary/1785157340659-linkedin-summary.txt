@@ -1,0 +1,58 @@
+# EVE RAG Agent — LinkedIn Post Draft
+
+<!-- Tech stack badges — generated from project summary -->
+
+![Static Badge](https://img.shields.io/badge/TypeScript-v7.0-3178C6?logo=typescript&logoColor=white&color=3178C6)
+![Static Badge](https://img.shields.io/badge/Node.js-v24.0-339933?logo=nodedotjs&logoColor=white&color=339933)
+![Static Badge](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&color=000000)
+![Static Badge](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white&color=3ECF8E)
+![Static Badge](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white&color=4169E1)
+![Static Badge](https://img.shields.io/badge/Zod-v4.4-3E67B1?logo=zod&logoColor=white&color=3E67B1)
+
+---
+
+Most RAG implementations are duct tape — a script that reads a file, chunks it manually, calls an embedding API, and dumps the result into a vector DB. Wiring it all together takes days, and maintaining it takes forever.
+
+This project does it differently.
+
+**EVE_RAG_Agent** is a full RAG pipeline built as a native agent using Vercel's Eve framework — complete with file ingestion, vector embedding, and semantic retrieval, all running through a conversational LLM interface backed by Claude Sonnet.
+
+🏗️ **The Architecture in 3 sentences:**
+Drop a file path into the terminal. The agent reads it, chunks the text with overlap, generates embeddings via `text-embedding-3-small`, and stores everything in a Supabase pgvector table. Ask a question later, and it embeds your query on-the-fly and runs a cosine similarity search against the entire knowledge base.
+
+---
+
+**🔴 The Old Way**
+- Write a one-off Python script to chunk and embed files
+- Manually manage Supabase connections and pgvector RPC calls
+- Build a separate API layer just to expose it to a frontend
+- Wire the LLM calls yourself with raw prompts
+- Zero error handling, no auth, no deployment story
+
+**🟢 The New Way (this project)**
+- Define tools once with `defineTool()` + Zod schemas — the agent calls them automatically
+- Eve handles the LLM ↔ tool loop natively (no LangChain, no orchestration boilerplate)
+- Auth via `vercelOidc()` — production-ready from day one
+- Supabase `match_documents` RPC does the heavy lifting on vector similarity
+- Deploy to Vercel with `eve build` — that's it
+
+---
+
+⚙️ **What's under the hood:**
+
+- **Eve** — Vercel's new agent framework (think: `defineAgent` + `eveChannel` as your entire backend)
+- **Vercel AI SDK v7** — unified `embed()` / `embedMany()` across any model provider
+- **Claude Sonnet (anthropic/claude-sonnet-5)** — the reasoning layer
+- **Supabase + pgvector** — persistent vector store with cosine similarity via a single RPC call
+- **Zod v4** — strict input validation on every tool, so the agent can't hallucinate bad params
+- **TypeScript 7 + Node 24** — cutting-edge runtime with native ESM
+
+---
+
+The thing that stands out here isn't just "RAG with Supabase." It's how little code you need when the framework actually fits the problem. The entire agent definition is 5 lines. The tools are self-contained. The auth is one function call.
+
+That's what modern agent tooling should feel like.
+
+🔗 https://github.com/Vorpalv2/EVE_RAG_Agent
+
+#AI #RAG #Vercel #Supabase #TypeScript #LLM #AgentFramework #BuildInPublic #SoftwareEngineering

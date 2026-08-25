@@ -1,0 +1,59 @@
+# Connect_Anshu — Personal Blogging App
+
+<!-- Tech stack badges — generated from project summary -->
+
+![Static Badge](https://img.shields.io/badge/Next.js-v16.2-000000?logo=nextdotjs&logoColor=white&color=000000)
+![Static Badge](https://img.shields.io/badge/React-v19.2-61DAFB?logo=react&logoColor=black&color=61DAFB)
+![Static Badge](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&color=3178C6)
+![Static Badge](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white&color=06B6D4)
+![Static Badge](https://img.shields.io/badge/Sanity-v5-F03E2F?logo=sanity&logoColor=white&color=F03E2F)
+![Static Badge](https://img.shields.io/badge/Framer_Motion-0055FF?logo=framer&logoColor=white&color=0055FF)
+![Static Badge](https://img.shields.io/badge/Upstash_Redis-DC382D?logo=redis&logoColor=white&color=DC382D)
+![Static Badge](https://img.shields.io/badge/Vercel_AI_SDK-000000?logo=vercel&logoColor=white&color=000000)
+![Static Badge](https://img.shields.io/badge/Resend-000000?logo=maildotru&logoColor=white&color=000000)
+![Static Badge](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&color=000000)
+
+---
+
+Most personal blog projects in 2024 are still built the same way: a CMS, a frontend, and a form that sends an email. That's it. This one is built differently.
+
+**Connect_Anshu** is a personal blogging platform for Anshu Anand that treats a blog like a full product — with AI built in, email as a first-class feature, and a CMS that lives inside the app itself.
+
+The architecture is clean: **Next.js 16 App Router** on the frontend, **Sanity v5** as the headless CMS with Sanity Studio embedded directly at `/studio`, and **Upstash Redis** handling rate limiting and server-side caching without any external infra.
+
+---
+
+## The Old Way vs The New Way
+
+| The Old Way | Connect_Anshu |
+|---|---|
+| WordPress or Ghost with a plugin-per-feature approach | Headless Sanity CMS with an embedded Studio + GROQ queries |
+| Blog is just text — reader has no way to engage | Every blog post has an AI Chat Drawer (Google Gemini via Vercel AI SDK) |
+| Contact form → PHP mailer or SMTP hack | Resend + react-email for proper transactional email templates |
+| Content search is a third-party plugin | react-cmdk command palette built into the UI natively |
+| Page transitions: none, or a jarring full reload | Next.js experimental `viewTransition` API for native browser page animations |
+| Server vs client logic is blurry | Explicit `serverComp/` and `clientComp/` folders enforcing the RSC boundary |
+| Redis requires a self-managed server | Upstash Redis — serverless, edge-compatible, zero ops |
+
+---
+
+## What Makes This Stack Smart
+
+🧠 **AI-native reading experience** — The `api/chat` route streams responses from Google Gemini directly into a drawer overlay. Readers don't leave the post to ask questions about it.
+
+📬 **Resend + React Email** — Emails are React components, styled and testable like any other component. No more juggling raw HTML templates in an SMTP config.
+
+⚡ **Sanity Studio embedded in the app** — The `/studio` route IS the CMS. No separate deployment, no separate login. The content layer and the presentation layer live in the same repo.
+
+🎨 **Framer Motion + ViewTransitions** — Two animation layers: Framer for component-level transitions, and the experimental Next.js ViewTransition API for cross-page animations that feel native.
+
+🔴 **Upstash Redis at the edge** — Rate limiting and caching without provisioning a Redis instance. Serverless-first, billed per request.
+
+---
+
+The result is a personal blogging platform that punches way above its weight. It's not just a blog — it's an AI-augmented, edge-deployed, CMS-embedded reading experience.
+
+🔗 Live: https://connect-anshu.vercel.app
+🔗 GitHub: https://github.com/Vorpalv2/Connect_Anshu
+
+#nextjs #react #sanity #vercelai #typescript #webdev #buildinpublic #fullstackdevelopment

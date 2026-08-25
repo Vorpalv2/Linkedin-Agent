@@ -1,0 +1,44 @@
+
+# Performance Tracker — LinkedIn Post
+
+![Static Badge](https://img.shields.io/badge/TypeScript-v5.0-3178C6?logo=typescript&logoColor=white&color=3178C6)
+![Static Badge](https://img.shields.io/badge/Next.js-v16.2-000000?logo=nextdotjs&logoColor=white&color=000000)
+![Static Badge](https://img.shields.io/badge/React-v19.2-61DAFB?logo=react&logoColor=black&color=61DAFB)
+![Static Badge](https://img.shields.io/badge/Tailwind_CSS-v4.0-06B6D4?logo=tailwindcss&logoColor=white&color=06B6D4)
+![Static Badge](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white&color=3ECF8E)
+![Static Badge](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white&color=4169E1)
+![Static Badge](https://img.shields.io/badge/Drizzle_ORM-v0.45-C5F74F?logo=drizzle&logoColor=black&color=C5F74F)
+![Static Badge](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&color=000000)
+
+---
+
+Most fitness tracking apps are built with a backend API, a separate auth service, and a client that stitches it all together. This project collapses all of that into a single Next.js App Router codebase — and it's a great study in how far the modern stack has come.
+
+**Performance Tracker** is a full-stack gym routine and workout session analyzer. You build routines, assign exercises to them, then log live sets — weight, reps, completion — all tied back to your profile. The data model is clean: profiles → routines → exercises (via a bridge table) → workout logs → session sets.
+
+Here's what makes the architecture interesting:
+
+🔁 **The Old Way vs The New Way**
+
+| The Old Way | The New Way (This Project) |
+|---|---|
+| REST API routes for every mutation | Next.js Server Actions (`"use server"`) called directly from components |
+| Separate auth microservice + JWT plumbing | Supabase SSR middleware — session refresh happens at the edge, automatically |
+| Prisma or raw SQL with manual type mapping | Drizzle ORM — schema-first, fully type-safe, zero query builder magic |
+| `useEffect` + fetch waterfalls on the client | React Server Components fetch data at render time, no client round-trips |
+| Multiple `package.json`s for monorepo splits | Single pnpm workspace, clean and flat |
+
+🛠️ **The Stack Breakdown:**
+- **Next.js 16** (App Router) + **React 19** — the latest stable release of both
+- **Drizzle ORM** — TypeScript-native schema definitions with inferred types straight from the table (`$inferSelect`, `$inferInsert`)
+- **Supabase** — handles Postgres hosting AND auth, with the `@supabase/ssr` package wiring session cookies through Next.js middleware
+- **Tailwind CSS v4** — the new Vite-native, zero-config PostCSS pipeline
+- **TypeScript 5** throughout — every DB row type is auto-derived from the schema, no manual interface duplication
+
+The part worth studying: the `middleware.ts` runs `supabase.auth.getUser()` on every request to silently refresh sessions without any client-side token management. That's auth that just works — no `useEffect`, no localStorage, no interceptors.
+
+This is the pattern production apps should be moving toward in 2025.
+
+🔗 GitHub: https://github.com/Vorpalv2/Performance-Tracker
+
+#nextjs #typescript #react #supabase #drizzle #fullstack #webdevelopment #tailwindcss

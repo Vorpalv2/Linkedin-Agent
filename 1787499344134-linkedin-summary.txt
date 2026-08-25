@@ -1,0 +1,47 @@
+# Performance Tracker — LinkedIn Post
+
+![Static Badge](https://img.shields.io/badge/TypeScript-v5.0-3178C6?logo=typescript&logoColor=white&color=3178C6)
+![Static Badge](https://img.shields.io/badge/Next.js-v16.0-000000?logo=nextdotjs&logoColor=white&color=000000)
+![Static Badge](https://img.shields.io/badge/React-v19.0-61DAFB?logo=react&logoColor=black&color=61DAFB)
+![Static Badge](https://img.shields.io/badge/Tailwind_CSS-v4.0-06B6D4?logo=tailwindcss&logoColor=white&color=06B6D4)
+![Static Badge](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white&color=4169E1)
+![Static Badge](https://img.shields.io/badge/Drizzle_ORM-C5F74F?logo=drizzle&logoColor=black&color=C5F74F)
+![Static Badge](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white&color=3ECF8E)
+![Static Badge](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&color=000000)
+
+---
+
+Most gym tracker apps are either glorified spreadsheets or bloated mobile apps that still can't tell you what you lifted last Tuesday. So I built one that actually knows.
+
+**Performance Tracker** is a full-stack workout tracker where the database, auth, and UI are all speaking the same language — TypeScript, end-to-end.
+
+The core idea: your weekly routine is a template. Every time you train, a live workout session is created, sets are tracked in real time, and the whole thing gets committed to PostgreSQL through Drizzle ORM — with full type safety from schema to component.
+
+---
+
+🔄 **The Old Way**
+- REST API calls from a client component just to check if the user is logged in
+- Raw SQL or heavy ORMs with zero type inference
+- Duplicated state between server fetches and client UI
+- Auth logic scattered across API routes and middleware
+
+⚡ **The New Way (This Project)**
+- Supabase SSR middleware refreshes the session on every request — auth is solved at the edge, before a single component renders
+- Drizzle ORM defines the schema in TypeScript → infers table types → those same types flow into Server Actions and React components, no manual interfaces needed
+- Next.js 16 App Router Server Components fetch data directly on the server, async/await style — no useEffect, no loading spinners for initial data
+- React Context manages live session state (sets, reps, weight) only on the client, cleanly isolated from the server data layer
+
+---
+
+🏗️ **Architecture Highlights**
+
+- 📅 Weekly scheduler maps routine templates to calendar days and computes per-day status (completed / upcoming / planned / recovery) in a single server action
+- 🏋️ Active session tracks each set row live — weight, reps, completion — persisted to `workout_session_sets` on the fly
+- 📊 Dashboard pulls personal records, weekly progress, and today's focus all via async Server Components with `<Suspense>` boundaries
+- 🗂️ Drizzle relations define joins declaratively — no raw SQL joins needed for nested workout log + sets queries
+
+---
+
+The stack doesn't fight you. When your ORM types match your component props and your auth runs in middleware, you spend time on product — not plumbing.
+
+#NextJS #React #TypeScript #DrizzleORM #Supabase #PostgreSQL #WebDevelopment #FullStack #TailwindCSS
