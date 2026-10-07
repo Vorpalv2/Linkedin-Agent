@@ -2,6 +2,11 @@ name: Publish CLI to GitHub Packages
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-github-package.yml
 
 permissions:
   contents: read
