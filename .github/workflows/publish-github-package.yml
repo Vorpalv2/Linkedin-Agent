@@ -1,0 +1,29 @@
+name: Publish CLI to GitHub Packages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: '@vorpalv2'
+
+      - name: Publish package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm pkg set name='@vorpalv2/linkedin-repo-storyteller-cli' --prefix cli-package
+          npm publish ./cli-package --registry=https://npm.pkg.github.com
