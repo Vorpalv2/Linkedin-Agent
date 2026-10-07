@@ -2,6 +2,9 @@
   "name": "linkedin_agent_v2",
   "version": "0.0.0",
   "type": "module",
+  "bin": {
+    "linkedin-agent": "./cli.js"
+  },
   "imports": {
     "#*": "./agent/*",
     "#evals/*": "./evals/*"
@@ -10,6 +13,7 @@
     "build": "eve build",
     "dev": "eve dev",
     "start": "eve start",
+    "cli": "node ./cli.js",
     "typecheck": "tsc"
   },
   "dependencies": {

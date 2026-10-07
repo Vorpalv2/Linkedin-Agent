@@ -1,0 +1,31 @@
+{
+  "name": "linkedin-repo-storyteller-cli",
+  "version": "0.1.1",
+  "description": "A terminal client for turning GitHub repositories into LinkedIn post drafts with a remote Eve agent.",
+  "type": "module",
+  "bin": {
+    "linkedin-repo-storyteller-cli": "./cli.js"
+  },
+  "files": [
+    "cli.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "eve": "^0.72.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vorpalv2/Linkedin-Agent.git",
+    "directory": "cli-package"
+  },
+  "homepage": "https://github.com/Vorpalv2/Linkedin-Agent#readme",
+  "bugs": {
+    "url": "https://github.com/Vorpalv2/Linkedin-Agent/issues"
+  },
+  "license": "MIT",
+  "private": false
+}

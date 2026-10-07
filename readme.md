@@ -13,6 +13,20 @@ I built a LinkedIn Content Agent on top of Vercel Eve — a new agentic framewor
 
 No orchestration boilerplate. No hand-rolled API clients. Just declared tools and a model config.
 
+## Try the terminal CLI
+
+Use the published CLI to analyze a public GitHub repository from your terminal. It connects to the hosted Eve agent and saves the generated LinkedIn post draft as a Markdown file on your Desktop.
+
+Requires Node.js 24 or later.
+
+```bash
+npx linkedin-repo-storyteller-cli
+```
+
+The CLI prompts you for a GitHub repository URL. You can also install it globally with `npm install --global linkedin-repo-storyteller-cli` and then run `linkedin-repo-storyteller-cli`.
+
+Package: [linkedin-repo-storyteller-cli on npm](https://www.npmjs.com/package/linkedin-repo-storyteller-cli).
+
 🔩 The stack:
 → Eve (^0.26.2) — the core agent runtime and deployment layer
 → Vercel AI SDK (v7) — streaming model calls, tool-use primitives
