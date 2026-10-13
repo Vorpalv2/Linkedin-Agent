@@ -16,7 +16,7 @@ function printWelcome() {
   console.log(`\x1b[36m│\x1b[0m  Turn the engineering behind a repo into a post.   \x1b[36m│\x1b[0m`);
   console.log(`\x1b[36m╰──────────────────────────────────────────────────────╯\x1b[0m\n`);
   console.log("I’ll explore the project and draft a LinkedIn post for you.");
-  console.log("Paste a public GitHub repository URL to get started.\n");
+  console.log("Paste a public GitHub repository URL, optionally with a /tree/branch path.\n");
 }
 
 function normalizeGitHubUrl(value) {
@@ -27,15 +27,55 @@ function normalizeGitHubUrl(value) {
     return null;
   }
 
-  if (url.protocol !== "https:" || url.hostname !== "github.com") return null;
+  if (
+    url.protocol !== "https:" ||
+    url.hostname !== "github.com" ||
+    url.port ||
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash
+  ) return null;
 
-  const parts = url.pathname.split("/").filter(Boolean);
-  if (parts.length !== 2 || parts.some((part) => part === "." || part === "..")) {
+  let parts;
+  try {
+    parts = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
+  } catch {
     return null;
   }
 
-  const [owner, repository] = parts;
-  return `https://github.com/${owner}/${repository.replace(/\.git$/i, "")}`;
+  if (parts.some((part) => part === "." || part === "..")) return null;
+
+  const [owner, rawRepository, route, ...branchParts] = parts;
+  if (!owner || !rawRepository || owner.includes("/") || rawRepository.includes("/") || !/^[\w-]+$/.test(owner)) return null;
+
+  const repository = rawRepository.replace(/\.git$/i, "");
+  if (!repository || repository === "." || repository === ".." || !/^[\w.-]+$/.test(repository)) return null;
+
+  let branch = null;
+  if (parts.length === 2) {
+    // Repository root: analyze the default branch.
+  } else if (route === "tree" && branchParts.length > 0) {
+    branch = branchParts.join("/");
+    if (
+      branch.startsWith("/") ||
+      branch.endsWith("/") ||
+      branch === "@" ||
+      branch.includes("//") ||
+      branch.includes("..") ||
+      branch.includes("@{") ||
+      /[\x00-\x20\x7f~^:?*\\[]/.test(branch) ||
+      branch.split("/").some((part) => part.startsWith(".") || part.endsWith(".") || /\.lock$/i.test(part))
+    ) return null;
+  } else {
+    return null;
+  }
+
+  const encodedRepository = encodeURIComponent(repository);
+  if (!branch) return `https://github.com/${owner}/${encodedRepository}`;
+
+  const encodedBranch = branch.split("/").map(encodeURIComponent).join("/");
+  return `https://github.com/${owner}/${encodedRepository}/tree/${encodedBranch}`;
 }
 
 async function askForRepository() {
@@ -45,10 +85,66 @@ async function askForRepository() {
       const answer = await terminal.question("\x1b[36m›\x1b[0m GitHub repo URL: ");
       const repoUrl = normalizeGitHubUrl(answer);
       if (repoUrl) return repoUrl;
-      console.log("Please enter a repository URL like https://github.com/owner/repo.\n");
+      console.log("Enter a URL like https://github.com/owner/repo or https://github.com/owner/repo/tree/branch-name.\n");
     }
   } finally {
     terminal.close();
+  }
+}
+
+async function askForGatewayKey() {
+  if (!stdin.isTTY || typeof stdin.setRawMode !== "function") {
+    throw new Error("The Gateway API key prompt requires an interactive terminal so the key can stay hidden.");
+  }
+
+  stdout.write("\x1b[1mVercel AI Gateway API key\x1b[0m (input hidden): ");
+  stdin.setRawMode(true);
+  stdin.resume();
+  let value = "";
+
+  try {
+    return await new Promise((resolve, reject) => {
+      const onData = (chunk) => {
+        for (const character of chunk.toString("utf8")) {
+          if (character === "\u0003" || character === "\u001b") {
+            cleanup();
+            reject(new Error("Gateway API key entry cancelled."));
+            return;
+          }
+          if (character === "\r" || character === "\n") {
+            const apiKey = value.trim();
+            cleanup();
+            if (!apiKey) {
+              reject(new Error("A Vercel AI Gateway API key is required to run an analysis."));
+            } else {
+              resolve(apiKey);
+            }
+            return;
+          }
+          if (character === "\u007f" || character === "\b") {
+            if (value.length) {
+              value = value.slice(0, -1);
+              stdout.write("\b \b");
+            }
+            continue;
+          }
+          if (character >= " ") {
+            value += character;
+            stdout.write("•");
+          }
+        }
+      };
+
+      function cleanup() {
+        stdin.off("data", onData);
+        stdin.setRawMode(false);
+        stdout.write("\n");
+      }
+
+      stdin.on("data", onData);
+    });
+  } finally {
+    if (stdin.isRaw) stdin.setRawMode(false);
   }
 }
 
@@ -95,12 +191,17 @@ async function saveDraftToDesktop(text) {
 
 async function main() {
   printWelcome();
+  const gatewayApiKey = await askForGatewayKey();
   const repoUrl = await askForRepository();
 
   console.log(`\n\x1b[2mConnecting to ${agentUrl}…\x1b[0m`);
   console.log("\x1b[33m⠋\x1b[0m Starting repository analysis…\n");
 
-  const client = new Client({ host: agentUrl });
+  const client = new Client({
+    host: agentUrl,
+    headers: () => ({ "x-eve-gateway-key": gatewayApiKey }),
+    redirect: "error",
+  });
   const { response } = await client.sessions.create({
     message: `Analyze this GitHub repository and draft a LinkedIn post: ${repoUrl}`,
   });

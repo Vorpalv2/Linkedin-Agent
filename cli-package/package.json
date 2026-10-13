@@ -1,6 +1,6 @@
 {
   "name": "linkedin-repo-storyteller-cli",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "A terminal client for turning GitHub repositories into LinkedIn post drafts with a remote Eve agent.",
   "type": "module",
   "bin": {
